@@ -3,10 +3,6 @@ description: 'Action to generate vaunt cards in the .vaunt/cards directory'
 author: VauntDev
 
 inputs:
-  entity:
-    description: 'entity to use in API call, defaults to repo owner'
-    required: true
-    default: ${{ github.repository_owner }}
   token:
     description: 'optional github PAT for authentication'
     required: false
