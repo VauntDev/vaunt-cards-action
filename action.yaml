@@ -1,0 +1,39 @@
+name: 'Vaunt Cards Action'
+description: 'Action to generate vaunt cards in the .vaunt/cards directory'
+author: VauntDev
+
+inputs:
+  entity:
+    description: 'entity to use in API call, defaults to repo owner'
+    required: true
+    default: ${{ github.repository_owner }}
+  token:
+    description: 'optional github PAT for authentication'
+    required: false
+runs:
+  using: "composite"
+  steps:
+    - name: Setup GITHUB_PATH for script
+      run: echo "${{ github.action_path }}" >> $GITHUB_PATH
+      shell: bash
+    - name: Get repository name
+      run: echo "REPOSITORY_NAME=${GITHUB_REPOSITORY#*/}" >> $GITHUB_ENV
+      shell: bash
+    - name: Run script to fetch cards
+      run: generate.sh
+      shell: bash
+      env:
+        ENTITY: ${{ github.repository_owner }}
+        REPOSITORY: ${{ env.REPOSITORY_NAME }}
+        TOKEN: ${{ inputs.token }}
+    - name: setup git config
+      shell: bash
+      run: |
+        git config user.name "GitHub Actions Bot"
+        git config user.email "<>"
+    - name: commit cards to current branch
+      shell: bash
+      run: |
+        git add .vaunt
+        git commit -m "updating Vaunt cards"
+        git push origin HEAD
