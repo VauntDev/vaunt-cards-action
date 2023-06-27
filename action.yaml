@@ -6,6 +6,10 @@ inputs:
   token:
     description: 'optional github PAT for authentication'
     required: false
+  limit:
+    description: 'number of top contributors to show'
+    required: false
+    default: '10'
 runs:
   using: "composite"
   steps:
@@ -21,6 +25,7 @@ runs:
       env:
         ENTITY: ${{ github.repository_owner }}
         REPOSITORY: ${{ env.REPOSITORY_NAME }}
+        LIMIT: ${{ inputs.limit }}
         TOKEN: ${{ inputs.token }}
     - name: setup git config
       shell: bash
