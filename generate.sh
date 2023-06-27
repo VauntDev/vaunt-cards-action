@@ -7,7 +7,7 @@ conributorsFile=.vaunt/cards/contributors.svg
 if [ -z ${TOKEN} ]
 then
     # Token not set
-    response=$(curl --compressed -H "content-type: application/json" --write-out '%{http_code}' --output $conributorsFile https://api.vaunt.dev/v1/github/entities/${ENTITY}/repositories/${REPOSITORY}/contributors?format=svg)
+    response=$(curl --compressed -H "content-type: application/json" --write-out '%{http_code}' --output $conributorsFile https://api.vaunt.dev/v1/github/entities/${ENTITY}/repositories/${REPOSITORY}/contributors?format=svg&limit=${LIMIT})
 else
     # Token set, authenticate with github to get a Vaunt token first
     vauntToken=$(curl -H "content-type: application/json" -H "Authorization: Bearer ${TOKEN}" https://api.vaunt.dev/v1/github/entities/${ENTITY}/token | jq -r '.data.token')
@@ -18,7 +18,7 @@ else
         exit 1
     fi
 
-    response=$(curl --compressed -H "content-type: application/json" -H "Authorization: Bearer $vauntToken" --write-out '%{http_code}' --output $conributorsFile https://api.vaunt.dev/v1/github/entities/${ENTITY}/repositories/${REPOSITORY}/contributors?format=svg)
+    response=$(curl --compressed -H "content-type: application/json" -H "Authorization: Bearer $vauntToken" --write-out '%{http_code}' --output $conributorsFile https://api.vaunt.dev/v1/github/entities/${ENTITY}/repositories/${REPOSITORY}/contributors?format=svg&limit=${LIMIT})
 fi
 
 if [ $response != 200 ]
