@@ -36,5 +36,5 @@ runs:
       shell: bash
       run: |
         git add .vaunt
-        git commit -m "updating Vaunt cards"
+        git commit -m "updating Vaunt cards" || echo "No changes to commit"
         git push origin HEAD
